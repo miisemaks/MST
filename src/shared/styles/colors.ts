@@ -1,10 +1,12 @@
 export const colors = {
-  bgPrimary: '#fff',
+  bgPrimary: '#ffffff',
   bgSecondary: '#efececff',
 
   textPrimary: '#000',
-  textSecondary: '#ABABAB',
+  textSecondary: '#626262ff',
 
+  danger: '#fb1f1f',
+  border: '#ACACAC',
   accent: '#0fe047ff',
 };
 
