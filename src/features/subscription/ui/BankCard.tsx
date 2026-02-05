@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Trash } from 'shared/icons/Trash';
 import { colors } from 'shared/styles/colors';
 import { Radio } from 'shared/ui/Radio';
@@ -19,6 +20,7 @@ type Props = {
 export const BankCard = memo((props: Props) => {
   const { last_4_digits, onPress, onPressDelete, selected } = props;
   const { width } = useWindowDimensions();
+  const { left, right } = useSafeAreaInsets();
 
   return (
     <TouchableOpacity style={styles.root} onPress={onPress}>
@@ -27,7 +29,7 @@ export const BankCard = memo((props: Props) => {
         style={[
           styles.text,
           {
-            width: width - 136,
+            width: width - 136 - left - right,
           },
         ]}
       >

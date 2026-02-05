@@ -5,12 +5,14 @@ import { useQuery } from 'shared/api/client';
 import { getTrackList } from 'shared/api/track';
 import { Skeleton } from './ui/Skeleton';
 import { colors } from 'shared/styles/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const Main = () => {
   const { isLoading, data, refetch, isRefetching } = useQuery({
     queryKey: ['track_lists'],
     queryFn: async () => await getTrackList(),
   });
+  const { left, right } = useSafeAreaInsets();
 
   return (
     <View style={styles.root}>
@@ -38,6 +40,8 @@ export const Main = () => {
           }}
           contentContainerStyle={{
             padding: 16,
+            paddingLeft: left + 16,
+            paddingRight: right + 16,
             gap: 8,
           }}
           refreshControl={

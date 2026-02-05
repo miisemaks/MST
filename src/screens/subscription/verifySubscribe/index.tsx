@@ -12,7 +12,7 @@ export const VerifySubscribe = (props: Props) => {
   const { navigation } = props;
   const { setItem } = useAsyncStorage('initialRouteName');
 
-  const { bottom } = useSafeAreaInsets();
+  const { bottom, left, right } = useSafeAreaInsets();
 
   return (
     <View style={styles.root}>
@@ -21,7 +21,11 @@ export const VerifySubscribe = (props: Props) => {
       </View>
 
       <Button
-        containerStyle={{ marginHorizontal: 16, marginBottom: bottom }}
+        containerStyle={{
+          marginLeft: left + 16,
+          marginRight: right + 16,
+          marginBottom: bottom + 16,
+        }}
         title="Продолжить"
         onPress={() => {
           setItem('Main');

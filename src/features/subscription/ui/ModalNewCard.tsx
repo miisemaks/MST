@@ -19,7 +19,7 @@ type Props = {
 
 export const ModalNewCard = memo((props: Props) => {
   const { visible, onClose } = props;
-  const { top } = useSafeAreaInsets();
+  const { top, left, right } = useSafeAreaInsets();
   const { appendCard } = useBankCardStore();
 
   const { watch, setValue, reset } = useForm<{
@@ -58,7 +58,9 @@ export const ModalNewCard = memo((props: Props) => {
         blurAmount={20}
         style={{
           padding: 16,
-          margin: 16,
+          marginBottom: 16,
+          marginLeft: left + 16,
+          marginRight: right + 16,
           marginTop: 120,
           borderWidth: 1,
           borderColor: colors.border + '66',

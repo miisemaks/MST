@@ -14,7 +14,7 @@ type Props = StackScreenProps<'Subscription'>;
 
 export const Subscription = (props: Props) => {
   const { navigation } = props;
-  const { bottom } = useSafeAreaInsets();
+  const { bottom, left, right } = useSafeAreaInsets();
   const [select, setSelect] = useState<number | null>(null);
   const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ['subscriptions'],
@@ -24,13 +24,19 @@ export const Subscription = (props: Props) => {
   });
 
   return (
-    <View style={[styles.root, { paddingBottom: bottom }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingBottom: bottom, paddingLeft: left, paddingRight: right },
+      ]}
+    >
       {isLoading ? (
         <View style={{ flex: 1, paddingTop: 16 }}>
           <Skeleton />
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={data ?? []}
           keyExtractor={item => `subsc_${item.id}`}
           renderItem={({ item }) => (
@@ -55,7 +61,12 @@ export const Subscription = (props: Props) => {
               onRefresh={() => refetch()}
             />
           }
-          contentContainerStyle={styles.flatContentContainer}
+          contentContainerStyle={[
+            styles.flatContentContainer,
+            {
+              paddingBottom: bottom + 56,
+            },
+          ]}
           ListHeaderComponent={
             <Text style={styles.title}>Выберите подписку</Text>
           }
@@ -71,7 +82,10 @@ export const Subscription = (props: Props) => {
           });
         }}
         containerStyle={{
-          marginHorizontal: 16,
+          position: 'absolute',
+          left: left + 16,
+          right: right + 16,
+          bottom: bottom + 16,
         }}
       />
     </View>

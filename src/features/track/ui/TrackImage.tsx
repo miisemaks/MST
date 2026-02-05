@@ -14,6 +14,7 @@ import { RatingFill } from 'shared/icons/RatingFill';
 import { colors } from 'shared/styles/colors';
 import { Text } from 'shared/ui/Text';
 import ContentLoader, { Rect } from 'react-content-loader/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   url: string | null;
@@ -24,6 +25,7 @@ type Props = {
 export const TrackImage = memo((props: Props) => {
   const { url, rating, onPressPlus } = props;
   const { width } = useWindowDimensions();
+  const { left, right } = useSafeAreaInsets();
   const { watch, setValue } = useForm<{
     error: boolean;
     loading: boolean;
@@ -35,8 +37,8 @@ export const TrackImage = memo((props: Props) => {
   });
   const { error, loading } = watch();
   const size = useCallback(() => {
-    return (width - 32) / 2 - 8;
-  }, [width]);
+    return (width - 32 - left - right) / 2 - 8;
+  }, [left, right, width]);
 
   return (
     <ImageBackground

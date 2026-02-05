@@ -12,6 +12,7 @@ import { TrackImage } from './TrackImage';
 import { getStringDuration } from 'shared/lib';
 import { Duration } from 'shared/icons/Duration';
 import { User } from 'shared/icons/User';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
   title: string;
@@ -26,10 +27,11 @@ type Props = {
 export const TrackCard = memo((props: Props) => {
   const { title, author, url, duration, isPremium, rating } = props;
   const { width } = useWindowDimensions();
+  const { left, right } = useSafeAreaInsets();
 
   const size = useCallback(() => {
-    return (width - 32) / 2 - 8;
-  }, [width]);
+    return (width - 32 - left - right) / 2 - 8;
+  }, [left, right, width]);
 
   return (
     <LiquidGlassView

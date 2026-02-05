@@ -16,11 +16,12 @@ import { getSubscription } from 'shared/api/subscription';
 import { colors } from 'shared/styles/colors';
 import { StackScreenProps } from 'shared/types/Navigation';
 import { Text } from 'shared/ui/Text';
-import { Skeleton } from './ui/Skeleton';
+import { Skeleton, SkeletonCards } from './ui/Skeleton';
 import { useForm } from 'react-hook-form';
 import { useBankCardStore } from 'shared/store/card';
 import { BankCardType } from 'shared/types/BankCard';
 import { Button } from 'shared/ui/Button';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = StackScreenProps<'SubscriptionFill'>;
 
@@ -35,7 +36,7 @@ export const SubscriptionFill = (props: Props) => {
     },
   });
   const { cards, removeCard } = useBankCardStore();
-  const { data: dataCards } = useQuery({
+  const { data: dataCards, isLoading: isLoadingCards } = useQuery({
     queryKey: ['mycards'],
     queryFn: async () => {
       return new Promise<BankCardType[]>(resolve => {
@@ -55,71 +56,95 @@ export const SubscriptionFill = (props: Props) => {
     },
   });
   const { newCard, selectCard } = watch();
+  const { left, right, bottom } = useSafeAreaInsets();
 
   return (
     <View style={styles.root}>
-      {isLoading ? (
-        <Skeleton />
-      ) : data ? (
-        <View style={{ paddingHorizontal: 16 }}>
-          <SubscriptionCard
-            title={data?.title}
-            description={data.description}
-            bg={data.bg}
-            colorSelect={data.colorSelect}
-            cost={data.cost}
-            discount={data.discount}
-            symbol={data.symbol}
-            total={data.total}
-            selected={true}
-            onSelect={() => {}}
-          />
-        </View>
-      ) : null}
-      <TouchableOpacity onPress={() => setValue('newCard', true)}>
-        <Text style={{ color: colors.accent, fontWeight: 500, marginLeft: 16 }}>
-          Добавить карту
-        </Text>
-      </TouchableOpacity>
-      <FlatList
-        data={dataCards ?? []}
-        style={{ flex: 1 }}
-        keyExtractor={item => `bank_cards_${item.id}`}
-        renderItem={({ item }) => (
-          <BankCard
-            last_4_digits={item.cardNumber.substring(
-              item.cardNumber.length - 5,
+      <View style={{ flex: 1, gap: 16 }}>
+        {isLoadingCards ? (
+          <SkeletonCards />
+        ) : (
+          <FlatList
+            data={dataCards ?? []}
+            style={{ flex: 1 }}
+            keyExtractor={item => `bank_cards_${item.id}`}
+            renderItem={({ item }) => (
+              <BankCard
+                last_4_digits={item.cardNumber.substring(
+                  item.cardNumber.length - 5,
+                )}
+                selected={selectCard === item.id}
+                onPressDelete={() => {
+                  removeCard(item.id);
+                  invalidateQueries({
+                    queryKeys: ['mycards'],
+                  });
+                }}
+                onPress={() => {
+                  setValue('selectCard', item.id);
+                }}
+              />
             )}
-            selected={selectCard === item.id}
-            onPressDelete={() => {
-              removeCard(item.id);
-              invalidateQueries({
-                queryKeys: ['mycards'],
-              });
-              console.log(item.id);
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefetching}
+                onRefresh={() => refetch()}
+                tintColor={colors.accent}
+                colors={[colors.accent]}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              gap: 12,
+              paddingTop: 16,
+              paddingLeft: left + 16,
+              paddingRight: right + 16,
+              paddingBottom: bottom + 72,
             }}
-            onPress={() => {
-              setValue('selectCard', item.id);
-            }}
+            ListHeaderComponent={
+              <View style={{ gap: 16 }}>
+                {isLoading ? (
+                  <Skeleton />
+                ) : data ? (
+                  <SubscriptionCard
+                    title={data?.title}
+                    description={data.description}
+                    bg={data.bg}
+                    colorSelect={data.colorSelect}
+                    cost={data.cost}
+                    discount={data.discount}
+                    symbol={data.symbol}
+                    total={data.total}
+                    selected={true}
+                    onSelect={() => {}}
+                  />
+                ) : null}
+                <TouchableOpacity
+                  style={[styles.touchCreate]}
+                  onPress={() => setValue('newCard', true)}
+                >
+                  <Text style={{ color: colors.accent, fontWeight: 500 }}>
+                    Добавить карту
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
           />
         )}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={() => refetch()}
-            tintColor={colors.accent}
-            colors={[colors.accent]}
-          />
-        }
-        contentContainerStyle={{ flex: 1, paddingHorizontal: 16, gap: 12 }}
-      />
+      </View>
+
       <Button
         title="Продолжить"
         disabled={!selectCard}
         onPress={() => {
           navigation.navigate('VerifySubscribe');
         }}
-        containerStyle={{ marginHorizontal: 16, marginBottom: 16 }}
+        containerStyle={{
+          ...styles.btnNext,
+          bottom: bottom + 16,
+          left: left + 16,
+          right: right + 16,
+        }}
       />
       <ModalNewCard
         visible={newCard}
@@ -132,8 +157,6 @@ export const SubscriptionFill = (props: Props) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    paddingVertical: 16,
-    gap: 16,
   },
   newCardView: {
     gap: 8,
@@ -142,5 +165,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  touchCreate: {
+    alignSelf: 'flex-start',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  btnNext: {
+    position: 'absolute',
   },
 });
