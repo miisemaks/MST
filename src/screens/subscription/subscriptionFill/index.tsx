@@ -22,6 +22,7 @@ import { useBankCardStore } from 'shared/store/card';
 import { BankCardType } from 'shared/types/BankCard';
 import { Button } from 'shared/ui/Button';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { MaskedTextInput } from 'react-native-advanced-input-mask';
 
 type Props = StackScreenProps<'SubscriptionFill'>;
 
@@ -49,13 +50,15 @@ export const SubscriptionFill = (props: Props) => {
   const { watch, setValue } = useForm<{
     newCard: boolean;
     selectCard: number | null;
+    phone: string;
   }>({
     defaultValues: {
       newCard: false,
       selectCard: null,
+      phone: '',
     },
   });
-  const { newCard, selectCard } = watch();
+  const { newCard, selectCard, phone } = watch();
   const { left, right, bottom } = useSafeAreaInsets();
 
   return (
@@ -129,13 +132,23 @@ export const SubscriptionFill = (props: Props) => {
                 </TouchableOpacity>
               </View>
             }
+            ListFooterComponent={
+              <MaskedTextInput
+                value={phone}
+                onChangeText={value => setValue('phone', value)}
+                mask="+7 ([000]) [000] [00] [00]"
+                placeholder="+7 (000) 000 00 00"
+                style={styles.phoneInput}
+                keyboardType="phone-pad"
+              />
+            }
           />
         )}
       </View>
 
       <Button
         title="Продолжить"
-        disabled={!selectCard}
+        disabled={!selectCard || phone.length !== 18}
         onPress={() => {
           navigation.navigate('VerifySubscribe');
         }}
@@ -173,5 +186,11 @@ const styles = StyleSheet.create({
   },
   btnNext: {
     position: 'absolute',
+  },
+  phoneInput: {
+    backgroundColor: colors.bgPrimary,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 16,
   },
 });
