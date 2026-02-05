@@ -35,7 +35,13 @@ export const Button = (props: Props) => {
       style={[styles.container, containerStyle]}
       isInteractive
       glassType="regular"
-      glassTintColor={variant === 'primary' ? colors.accent : 'transparent'}
+      glassTintColor={
+        variant === 'primary'
+          ? disabled
+            ? colors.border
+            : colors.accent
+          : 'transparent'
+      }
       glassOpacity={0.8}
     >
       <TouchableOpacity

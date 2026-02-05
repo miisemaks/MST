@@ -20,6 +20,7 @@ export const Radio = memo((props: Props) => {
           width: size,
           height: size,
           borderRadius: size / 2,
+          borderColor: value ? color : colors.border + '66',
         },
       ]}
       onPress={onChange}
