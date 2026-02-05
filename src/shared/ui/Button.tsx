@@ -53,6 +53,7 @@ export const Button = (props: Props) => {
                 : variant === 'primary'
                 ? colors.textPrimary
                 : colors.accent,
+              fontWeight: 600,
             }}
           >
             {title}

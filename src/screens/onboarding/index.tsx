@@ -1,19 +1,60 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from 'shared/ui/Button';
-import { Text } from 'shared/ui/Text';
+import { Screen } from './ui/Screen';
+import { StackScreenProps } from 'shared/types/Navigation';
+import { useNavigationStore } from 'shared/store/navigation';
 
-export const Onboarding = () => {
+const data = [
+  {
+    title: 'Вся музыка мира — у тебя в кармане',
+    description:
+      'Миллионы треков, подкастов и аудиокниг. Находи свою музыку, создавай плейлисты и открывай новое — без ограничений.',
+  },
+  {
+    title: 'Музыка, которая понимает тебя',
+    description:
+      'Персональные рекомендации, умные плейлисты под любое настроение и возможность скачивать музыку, чтобы слушать её где угодно.',
+  },
+];
+
+type Props = StackScreenProps<'Onboarding'>;
+
+export const Onboarding = (props: Props) => {
+  const { navigation } = props;
   const { top, bottom } = useSafeAreaInsets();
+  const ref = useRef<FlatList>(null);
+  const [screenState, setScreenState] = useState(0);
+  const { setInitialScreen } = useNavigationStore();
 
   return (
     <View style={[styles.root, { paddingTop: top, paddingBottom: bottom }]}>
-      <Text>Onboarding</Text>
+      <FlatList
+        ref={ref}
+        data={data}
+        pagingEnabled
+        scrollEnabled={false}
+        keyExtractor={(_, index) => `screen_${index}`}
+        horizontal
+        renderItem={({ item }) => (
+          <Screen title={item.title} description={item.description} />
+        )}
+      />
       <Button
-        title="Test"
+        title={screenState === 0 ? 'Далее' : 'Продолжить'}
         containerStyle={{ marginHorizontal: 16 }}
-        onPress={() => {}}
+        onPress={() => {
+          if (screenState !== 0) {
+            navigation.navigate('Subscription');
+            setInitialScreen('Subscription');
+          } else {
+            setScreenState(state => state + 1);
+            ref.current?.scrollToIndex({
+              index: screenState + 1,
+            });
+          }
+        }}
       />
     </View>
   );
@@ -22,5 +63,6 @@ export const Onboarding = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    gap: 16,
   },
 });
