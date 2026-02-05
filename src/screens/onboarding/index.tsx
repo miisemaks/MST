@@ -46,8 +46,8 @@ export const Onboarding = (props: Props) => {
         containerStyle={{ marginHorizontal: 16 }}
         onPress={() => {
           if (screenState !== 0) {
-            navigation.navigate('Subscription');
             setItem('Subscription');
+            navigation.replace('Subscription');
           } else {
             setScreenState(state => state + 1);
             ref.current?.scrollToIndex({

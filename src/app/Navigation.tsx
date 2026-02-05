@@ -47,9 +47,6 @@ export const Navigation = () => {
     <NavigationContainer
       onReady={() => {
         hide();
-        // setTimeout(() => {
-
-        // }, 1000);
       }}
     >
       <Stack.Navigator
@@ -97,8 +94,6 @@ export const Navigation = () => {
             }}
           />
         </Stack.Group>
-        {/* TODO: продумать логику отображения без переходов в первые секунды. Оставил на потом чтобы не тратить время */}
-        {/* {initialScreen === 'Onboarding' ? ( */}
         <Stack.Screen
           name="Onboarding"
           component={Onboarding}
