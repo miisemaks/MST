@@ -8,6 +8,7 @@ export const colors = {
   danger: '#fb1f1f',
   border: '#ACACAC',
   accent: '#0fe047ff',
+  gold: '#eab328',
 };
 
 export type ColorType = keyof typeof colors;
