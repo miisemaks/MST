@@ -8,6 +8,7 @@
 import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Navigation } from './Navigation';
+import Toast from 'react-native-toast-message';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -16,6 +17,7 @@ function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <Navigation />
+      <Toast />
     </SafeAreaProvider>
   );
 }

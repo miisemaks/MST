@@ -5,13 +5,20 @@ import { StackParams } from 'shared/types/Navigation';
 import { Onboarding } from 'screens/onboarding';
 import { Subscription } from 'screens/subscription/subscription';
 import { Main } from 'screens/main';
+import { colors } from 'shared/styles/colors';
 
 const Stack = createNativeStackNavigator<StackParams>();
 
 export const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          contentStyle: {
+            backgroundColor: colors.bgSecondary,
+          },
+        }}
+      >
         <Stack.Screen
           name="Onboarding"
           component={Onboarding}
