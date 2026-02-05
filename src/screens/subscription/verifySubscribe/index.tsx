@@ -1,7 +1,7 @@
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigationStore } from 'shared/store/navigation';
 import { StackScreenProps } from 'shared/types/Navigation';
 import { Button } from 'shared/ui/Button';
 import { Text } from 'shared/ui/Text';
@@ -10,7 +10,7 @@ type Props = StackScreenProps<'VerifySubscribe'>;
 
 export const VerifySubscribe = (props: Props) => {
   const { navigation } = props;
-  const { setInitialScreen } = useNavigationStore();
+  const { setItem } = useAsyncStorage('initialRouteName');
 
   const { bottom } = useSafeAreaInsets();
 
@@ -24,7 +24,7 @@ export const VerifySubscribe = (props: Props) => {
         containerStyle={{ marginHorizontal: 16, marginBottom: bottom }}
         title="Продолжить"
         onPress={() => {
-          setInitialScreen('Main');
+          setItem('Main');
           navigation.popToTop();
           navigation.replace('Main');
         }}

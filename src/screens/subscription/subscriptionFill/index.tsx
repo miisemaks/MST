@@ -111,7 +111,7 @@ export const SubscriptionFill = (props: Props) => {
             colors={[colors.accent]}
           />
         }
-        contentContainerStyle={{ flex: 1, paddingHorizontal: 16 }}
+        contentContainerStyle={{ flex: 1, paddingHorizontal: 16, gap: 12 }}
       />
       <Button
         title="Продолжить"

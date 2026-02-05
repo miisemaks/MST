@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from 'shared/ui/Button';
 import { Screen } from './ui/Screen';
 import { StackScreenProps } from 'shared/types/Navigation';
-import { useNavigationStore } from 'shared/store/navigation';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const data = [
   {
@@ -24,9 +24,9 @@ type Props = StackScreenProps<'Onboarding'>;
 export const Onboarding = (props: Props) => {
   const { navigation } = props;
   const { top, bottom } = useSafeAreaInsets();
+  const { setItem } = useAsyncStorage('initialRouteName');
   const ref = useRef<FlatList>(null);
   const [screenState, setScreenState] = useState(0);
-  const { setInitialScreen } = useNavigationStore();
 
   return (
     <View style={[styles.root, { paddingTop: top, paddingBottom: bottom }]}>
@@ -47,7 +47,7 @@ export const Onboarding = (props: Props) => {
         onPress={() => {
           if (screenState !== 0) {
             navigation.navigate('Subscription');
-            setInitialScreen('Subscription');
+            setItem('Subscription');
           } else {
             setScreenState(state => state + 1);
             ref.current?.scrollToIndex({

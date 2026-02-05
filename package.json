@@ -23,6 +23,7 @@
     "react-hook-form": "^7.71.1",
     "react-native": "0.83.1",
     "react-native-advanced-input-mask": "^1.4.6",
+    "react-native-bootsplash": "^7.0.2",
     "react-native-safe-area-context": "^5.6.2",
     "react-native-screens": "^4.22.0",
     "react-native-svg": "^15.15.2",
