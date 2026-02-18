@@ -3,6 +3,7 @@
 ## Описание проекта
 
 Это тестовое задание.
+[ScreenCast написания проекта](https://drive.google.com/drive/folders/1lKX2Wi-FyUQ9iKWzaFMfCZZfYZiUI3uz?usp=sharing) 
 
 ## Содержание
 
